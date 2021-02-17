@@ -1,12 +1,22 @@
-import React from 'react'
+import React, { useCallback } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import {Categories, SortPopap} from "../components";
 
+import { setSortBy } from "../redux/actions/filter";
+
 function Home() {
+    const sortBy= useSelector(({setSortBy})=>setSortBy)
+    const dispatch = useDispatch()
+    const onSelectSortIdx = useCallback((idx)=>{
+        dispatch(setSortBy(idx))
+    },[])
     return (
         <div className="container">
           <div className="content__top">
             <Categories />
-            <SortPopap nameOfProps={['популярности', 'цене', 'алфавиту']}/>
+            <SortPopap 
+                onClickSortIdx={onSelectSortIdx}
+                nameOfProps={['популярности', 'цене', 'алфавиту']}/>
           </div>
           <h2 className="content__title">Все пиццы</h2>
           <div className="content__items">
