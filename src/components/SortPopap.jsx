@@ -1,12 +1,31 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 
-function SortPopap({nameOfProps}) {
-  const [popap, setPopap] = React.useState(false);
-  const handlerSetPopap = () => setPopap(!popap);
+
+  function SortPopap({ items, activeSortType, onClickSortType }) 
+  {
+  const [popap, setPopap] = useState(false);
+  const sortRef = useRef();
+  const activeLabel = items.find((obj) => obj.type === activeSortType).name;
+  
+
+  const handlerSetPopap = () => {
+    setPopap(!popap);
+  };
+
+
+
+  const onSelectItem = (idx) => {
+    if (onClickSortType) {
+      onClickSortType(idx);
+    }
+    setPopap(false);
+  };
+
   return (
     <div className="sort">
       <div className="sort__label">
         <svg
+        className={popap?'rotated':''}
           width="10"
           height="6"
           viewBox="0 0 10 6"
@@ -19,17 +38,22 @@ function SortPopap({nameOfProps}) {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span onClick={handlerSetPopap}>популярности</span>
+        <span onClick={handlerSetPopap}>{activeLabel}</span>
       </div>
-      {popap === true ? (
+      {popap && (
         <div className="sort__popup">
           <ul>
-            <li className="active">популярности</li>
-            {nameOfProps.map((obj, idx)=><li onClick={()=>console.log(idx)} key={`${idx}_${obj}`}>{obj}</li>)}
+            {items &&
+              items.map((obj, idx) => (
+                <li
+                  onClick={() => onSelectItem(obj)}
+                  className={activeSortType === obj.type ? "active" : ""}
+                  key={`${obj.type}_${idx}`}>
+                  {obj.name}
+                </li>
+              ))}
           </ul>
         </div>
-      ) : (
-        ""
       )}
     </div>
   );
