@@ -1,10 +1,12 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Categories, SortPopap } from "../components";
+import PizzasBlock from '../components/PizzasBlock';
 
 import { setCategory, setSortBy } from "../redux/actions/filter";
-import PizzasBlock from '../components/PizzasBlock';
+import { fetchPizzas } from "../redux/actions/pizzas";
+
 
 const categoryNames = [
   "Мясные",
@@ -24,6 +26,17 @@ function Home() {
   const dispatch = useDispatch();
   const { category, sortBy } = useSelector(({ filters }) => filters);
 
+  const items = useSelector(({pizzas})=>pizzas.items)
+
+  //----Looking Date-----
+  // console.log('Pizzas is Comming', useSelector(({pizzas})=>pizzas));
+  //----||||||||||||-----
+
+  useEffect(()=>{
+    dispatch(fetchPizzas())
+  },[fetchPizzas])
+  
+
   const selectCategory = useCallback((idx)=>{
     dispatch(setCategory(idx))
   })
@@ -32,8 +45,7 @@ function Home() {
     dispatch(setSortBy(type));
   }, []);
 
-  
-
+ 
   return (
     <div className="container">
       <div className="content__top">
@@ -48,8 +60,12 @@ function Home() {
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">
-     <PizzasBlock />
-     
+          { 
+            items && items.map((obj, idx)=><PizzasBlock 
+            dispatch={dispatch} 
+              key={idx} 
+              {...obj}  />)
+          }
       </div>
     </div>
   );
