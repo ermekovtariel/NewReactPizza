@@ -1,21 +1,31 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom';
-import Logo from "../assets/img/pizza-logo.svg";
 import { useSelector } from "react-redux";
+
+import Logo from "../assets/img/pizza-logo.svg";
+import Button from "./Button";
+import { render } from '@testing-library/react';
+
 function Header() {
-  const { totalPrice, totalCount } = useSelector(({ cart }) => cart);
-    return (
-        <div className="header">
-        <div className="container">
-          <Link to='/' className="header__logo">
-            <img width="38" src={Logo} alt="Pizza logo" />
-            <div>
-              <h1>React Pizza</h1>
-              <p>самая вкусная пицца во вселенной</p>
-            </div>
-          </Link>
-          <div className="header__cart">
-            <Link to="/Cart" className="button button--cart">
+  const { totalPrice, totalCount } = useSelector(({ cart }) => ({
+    totalCount: cart.totalCount,
+    totalPrice: cart.totalPrice
+  }))
+
+
+  return (
+    <div className="header">
+      <div className="container">
+        <Link to='/' className="header__logo">
+          <img width="38" src={Logo} alt="Pizza logo" />
+          <div>
+            <h1>React Pizza</h1>
+            <p>самая вкусная пицца во вселенной</p>
+          </div>
+        </Link>
+        <div className="header__cart">
+          <Link to="/Cart" >
+            <Button className="button--cart">
               <span>{totalPrice} ₽</span>
               <div className="button__delimiter"></div>
               <svg
@@ -48,12 +58,12 @@ function Header() {
                 />
               </svg>
               <span >{totalCount}</span>
-            </Link>
-          </div>
+            </Button>
+          </Link>
         </div>
       </div>
-      
-    )
+    </div>
+  )
 }
 
 export default Header

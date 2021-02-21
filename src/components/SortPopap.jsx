@@ -1,18 +1,14 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 
 
-  function SortPopap({ items, activeSortType, onClickSortType }) 
-  {
+function SortPopap({ items, activeSortType, onClickSortType }) {
   const [popap, setPopap] = useState(false);
-  const sortRef = useRef();
   const activeLabel = items.find((obj) => obj.type === activeSortType).name;
-  
+
 
   const handlerSetPopap = () => {
     setPopap(!popap);
   };
-
-
 
   const onSelectItem = (idx) => {
     if (onClickSortType) {
@@ -25,7 +21,7 @@ import React, { useRef, useState } from "react";
     <div className="sort">
       <div className="sort__label">
         <svg
-        className={popap?'rotated':''}
+          className={popap ? 'rotated' : ''}
           width="10"
           height="6"
           viewBox="0 0 10 6"
